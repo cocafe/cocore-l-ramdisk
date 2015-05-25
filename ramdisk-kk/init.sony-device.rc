@@ -1,0 +1,63 @@
+# Copyright (c) 2013 Sony Mobile Communications AB.
+
+#
+# init.sony-device.rc
+#
+import init.sony-platform.rc
+
+on boot
+    # PM8941 flash
+    chown media system /sys/class/misc/pm8941-flash/device/current1
+    chown media system /sys/class/misc/pm8941-flash/device/current2
+    chown media system /sys/class/misc/pm8941-flash/device/fault_status
+    chown media system /sys/class/misc/pm8941-flash/device/fine_current1
+    chown media system /sys/class/misc/pm8941-flash/device/fine_current2
+    chown media system /sys/class/misc/pm8941-flash/device/flash_timer
+    chown media system /sys/class/misc/pm8941-flash/device/mask_clamp_current
+    chown media system /sys/class/misc/pm8941-flash/device/mask_enable
+    chown media system /sys/class/misc/pm8941-flash/device/max_current
+    chown media system /sys/class/misc/pm8941-flash/device/mode
+    chown media system /sys/class/misc/pm8941-flash/device/startup_delay
+    chown media system /sys/class/misc/pm8941-flash/device/strobe
+    chown media system /sys/class/misc/pm8941-flash/device/vph_pwr_droop
+
+    # Enable Wi-Fi EAP SIM
+    setprop ro.wifi.eap_sim_enabled true
+
+    # Do not power down SIM in flight mode (required for Wi-Fi EAP-SIM)
+    setprop persist.radio.apm_sim_not_pwdn 1
+
+# Touch
+on property:persist.sys.touch.glove_mode=0
+    write /sys/devices/virtual/input/max1187x/glove 0
+
+on property:persist.sys.touch.glove_mode=1
+    write /sys/devices/virtual/input/max1187x/glove 1
+
+on property:sys.screen_on=0
+    write /sys/devices/virtual/input/max1187x/screen_status 0
+
+on property:sys.screen_on=1
+    write /sys/devices/virtual/input/max1187x/screen_status 1
+
+on property:persist.sys.touch.easywakeup=0
+    exec /system/bin/log "Easy Wakeup Mode Off"
+    write /sys/devices/virtual/input/max1187x/power/wakeup disabled
+
+on property:persist.sys.touch.easywakeup=1
+    exec /system/bin/log "Easy Wakeup Mode On"
+    write /sys/devices/virtual/input/max1187x/power/wakeup enabled
+
+on property:init.svc.illumination=running
+    start touchscreend
+
+service touchscreend /system/bin/touchscreend
+    disabled
+    user root
+    class core
+
+# CTA
+service cta /system/bin/cta_server
+    user root
+    group root
+    class main

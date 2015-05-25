@@ -1,0 +1,19 @@
+#
+# ADDITIONAL_DEFAULT_PROPERTIES
+#
+persist.sys.usb.config=mtp
+ro.sys.umsdirtyratio=20
+drm.service.enabled=true
+ro.somc.usb.direct.supported=true
+ro.secure=1
+ro.allow.mock.location=0
+ro.debuggable=0
+persist.sys.strict_op_enable=false
+persist.sys.whitelist=/system/etc/whitelist_appops.xml
+#
+# VERSION_PROPERTIES
+#
+ro.semc.version.sw=1279-0637
+ro.semc.version.sw_revision=17.1.E.2.67
+ro.semc.version.sw_variant=CMCC
+ro.semc.version.sw_type=user

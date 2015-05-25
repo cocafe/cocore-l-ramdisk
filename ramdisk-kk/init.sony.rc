@@ -1,0 +1,167 @@
+# Copyright (c) 2013 Sony Mobile Communications AB.
+
+import init.sony.usb.rc
+
+on init
+    mkdir /tmp
+    mount tmpfs tmpfs /tmp nosuid mode=0755,uid=0,gid=0
+    chmod 0664 /proc/rdtag
+    chown root system /proc/rdtag
+
+on early-fs
+    #ONLY_IN_DEBUG(symlink /dev/.fsck_log /dev/.fsck)
+
+on fs
+    #ONLY_IN_DEBUG(chmod 755 /fsckstore.sh)
+    mkdir /lta-label 0555 system system
+    wait /dev/block/platform/msm_sdcc.1/by-name/LTALabel
+    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/LTALabel /lta-label nosuid nodev noatime noexec ro barrier=0
+    chown system system /lta-label
+    chmod 0555 /lta-label
+
+on post-fs
+    # Change to socket location on libkeyctrl/suntory for /data encryption
+    mkdir /dev/socket/suntory 0755 system system
+
+on post-fs-data
+    mkdir /data/credmgr 0700 system system
+    mkdir /data/tombstones 0755 system system
+    mkdir /data/tombstones/vendor 0755 system system
+    mkdir /data/crashsms 0711 system system
+    mkdir /data/crashsms/crashes 0755 system system
+    mkdir /data/app-skin 0771 system system
+    mkdir /data/smime 0770 root smime_keystore
+    mkdir /data/pc 0700 radio radio
+    mkdir /data/mediaserver 0740 media media
+    
+    
+    # Remove lost+found in user and userdebug
+    exec /system/bin/rm -r /data/lost+found
+    
+    mkdir /data/lost+found 0770 root root
+    exec /system/bin/rm -r /cache/lost+found
+    
+    mkdir /cache/lost+found 0770 root root
+    exec /system/bin/rm -r /mnt/idd/lost+found
+    
+    mkdir /mnt/idd/lost+found 0770 root root
+
+on early-boot
+    exec /system/bin/sh /system/etc/pre_hw_config.sh
+
+on boot
+    exec /system/bin/taimport property
+
+    # Configurate TCP/IP kernel settings
+    exec /system/bin/sh /system/etc/init.netconfig.sh
+
+    # Install exfat module to support exfat file system
+    insmod /system/lib/modules/texfat.ko
+
+    # Disable C_A_D
+    exec system/bin/ctrlaltdel soft
+
+    # Configure coredumps
+    
+    
+
+
+    # Override the value set in rootdir/init.rc
+    
+
+    #ONLY_IN_DEBUG(setprop fsck.newfs 1)
+
+
+on property:dev.bootcomplete=1
+    start fota-snoop
+    start fota-trigger
+    start startup-prober
+
+# klogger and klogrouter service switch
+on property:sys.kernel.log=logcat
+    stop klogger
+    start klogrouter
+
+on property:sys.kernel.log=file
+    stop klogrouter
+    start klogger
+
+on property:sys.kernel.log=disable
+    stop klogger
+    stop klogrouter
+
+#ONLY_IN_DEBUG(
+#on property:vold.decrypt=trigger_restart_framework
+#   setprop fsck.newfs 1
+#)
+
+#ONLY_IN_DEBUG(
+#on property:fsck.newfs=1
+#    exec /system/bin/sh /fsckstore.sh /dev/.fsck_log /mnt/idd/fsck
+#    setprop fsck.newfs 0
+#)
+
+# klogger service
+service klogger /system/bin/kernel_log_redirector file
+    oneshot
+    disabled
+
+# klogrouter service
+service klogrouter /system/bin/kernel_log_redirector logcat
+    oneshot
+    disabled
+
+# Start suntrold
+service suntrold /system/bin/suntrold
+    user system
+    group system
+    oneshot
+    class main
+
+# Start Credential manager daemon
+service credmgrd /system/bin/credmgrd
+    user system
+    group system
+    socket credmgr stream 0660 system system
+    class main
+
+#Start crashmonitor native service
+
+
+# Sony: FOTA snooping
+service fota-snoop /system/bin/fota-snoop
+    group cache
+    oneshot
+    disabled
+
+# Sony: FOTA trigger
+service fota-trigger /system/bin/fota-trigger
+    group cache
+    disabled
+
+# Start system_monitor
+service system_monitor /system/bin/system_monitor
+    socket sysmon stream 0660 root system
+    class core
+    user root
+    disabled
+
+on property:ro.somc.thermal=system_monitor
+    start system_monitor
+
+
+
+
+
+service startup-prober /system/bin/startup-prober
+    user root
+    oneshot
+    disabled
+
+# bugreport is triggered by holding down volume down, volume up and power
+service bugreport /system/bin/dumpstate -d -p -B \
+        -o /data/data/com.android.shell/files/bugreports/bugreport
+    class main
+    disabled
+    oneshot
+    keycodes 114 115 116
