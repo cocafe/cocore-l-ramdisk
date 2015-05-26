@@ -11,4 +11,4 @@ export BOOTREC_FOTA_NODE="/dev/block/mmcblk0p16 b 179 16"
 export BOOTREC_FOTA="/dev/block/mmcblk0p16"
 export BOOTREC_CODE_VOLUP=115
 export BOOTREC_CODE_VOLDN=114
-export BOOTREC_GPIO="/sys/devices/gpio_keys.83/keys_pressed"
+export BOOTREC_GPIO="/sys/devices/gpio_keys.82/keys_pressed"
