@@ -161,7 +161,7 @@ service illumination /system/bin/illumination_service
     class core
     user root
 
-service set-governor /system/bin/sh /system/etc/set_governor.sh
+service set-governor /system/bin/sh /sbin/set_governor.sh
     user root
     disabled
     oneshot
