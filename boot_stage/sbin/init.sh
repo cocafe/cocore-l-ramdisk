@@ -23,14 +23,14 @@ busybox echo 120 > /sys/class/timed_output/vibrator/enable
 
 if busybox grep -q '115' ${BOOTREC_GPIO} ; then
 
-	busybox echo 255 > ${BOOTREC_LED_RED}
-	busybox echo 95  > ${BOOTREC_LED_GREEN}
-	busybox echo 255 > ${BOOTREC_LED_BLUE}
+	busybox echo 200 > ${BOOTREC_LED_RED}
+	busybox echo 96  > ${BOOTREC_LED_GREEN}
+	busybox echo 0 > ${BOOTREC_LED_BLUE}
 
-	busybox echo 'Philz Recovery Boot' >> boot.log
+	busybox echo 'CWM Recovery Boot' >> boot.log
 
-	busybox lzma -d /sbin/recovery-philz.cpio.lzma
-	load_image=/sbin/recovery-philz.cpio
+	busybox lzma -d /sbin/recovery-cwm.cpio.lzma
+	load_image=/sbin/recovery-cwm.cpio
 
 elif busybox grep -q '114' ${BOOTREC_GPIO} || busybox grep -q warmboot=0x77665502 /proc/cmdline ; then
 
