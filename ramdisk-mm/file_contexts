@@ -1034,3 +1034,8 @@
 # /vendor overlay
 #
 /vendor(.*)		u:object_r:system_file:s0
+
+##########################
+# SuperSU
+#
+/su(/.*)? u:object_r:system_file:s0

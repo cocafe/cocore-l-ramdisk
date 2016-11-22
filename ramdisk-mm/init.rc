@@ -11,6 +11,7 @@ import /init.${ro.hardware}.rc
 import /init.usb.configfs.rc
 import /init.${ro.zygote}.rc
 import /init.trace.rc
+import /init.supersu.rc
 
 on early-init
     # Set init and its forked children's oom_adj.
@@ -390,7 +391,7 @@ on post-fs-data
     setusercryptopolicies /data/user
 
     # Reload policy from /data/security if present.
-    setprop selinux.reload_policy 1
+    # setprop selinux.reload_policy 1
 
     # Set SELinux security contexts on upgrade or policy update.
     restorecon_recursive /data
