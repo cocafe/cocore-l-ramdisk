@@ -39,7 +39,7 @@ on init
     setprop persist.sys.wfd.virtual 0
 
 on post-fs
-    export LD_PRELOAD libNimsWrap.so
+    export LD_PRELOAD libNimsWrap.so:libdrmfix.so
 
 on fs
     # SONY: start service that shows graphics if checking filesystems takes long time.
