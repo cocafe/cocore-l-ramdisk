@@ -300,6 +300,7 @@ on boot
     write /proc/sys/vm/dirty_background_ratio  5
     write /proc/sys/vm/dirty_ratio  30
     write /proc/sys/vm/highmem_is_dirtyable 1
+    write /proc/sys/vm/vfs_cache_pressure 70
 
     # BPF Jit Compiler
     write /proc/sys/net/core/bpf_jit_enable 1
@@ -578,6 +579,10 @@ service mdnsd /system/bin/mdnsd
     socket mdnsd stream 0660 mdnsr inet
     disabled
     oneshot
+
+#service logger_load /sbin/logger.sh
+#    disabled
+#    oneshot
 
 service sysinit /system/bin/logwrapper /sbin/busybox run-parts /system/etc/init.d
     disabled

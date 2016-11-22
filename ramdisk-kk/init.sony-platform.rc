@@ -113,7 +113,8 @@ on property:vold.decrypt=trigger_restart_framework
     start display_cc
 
 on property:init.svc.bootanim=stopped
-    start set-governor
+    start init-cocore
+    start mount-extsdcard
 
 
 
@@ -161,7 +162,12 @@ service illumination /system/bin/illumination_service
     class core
     user root
 
-service set-governor /system/bin/sh /sbin/set_governor.sh
+service init-cocore /system/bin/sh /sbin/init.cocore.post_boot.sh
+    user root
+    disabled
+    oneshot
+
+service mount-extsdcard /system/bin/sh /sbin/extsdcard
     user root
     disabled
     oneshot

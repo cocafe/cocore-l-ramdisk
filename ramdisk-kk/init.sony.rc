@@ -19,6 +19,9 @@ on fs
     chown system system /lta-label
     chmod 0555 /lta-label
 
+    # load android logger module
+    # start logger_load
+
 on post-fs
     # Change to socket location on libkeyctrl/suntory for /data encryption
     mkdir /dev/socket/suntory 0755 system system
@@ -56,7 +59,7 @@ on boot
     exec /system/bin/sh /system/etc/init.netconfig.sh
 
     # Install exfat module to support exfat file system
-    insmod /system/lib/modules/texfat.ko
+    # insmod /system/lib/modules/texfat.ko
 
     # Disable C_A_D
     exec system/bin/ctrlaltdel soft

@@ -1,4 +1,16 @@
 #!/system/bin/sh
+
+#	Fix conflict busybox with user installed one
+#	mount -t rootfs -o rw,remount rootfs /
+#	mv /sbin/busybox /sbin/busybox-sbin
+#	mount -t rootfs -o ro,remount rootfs /
+
+#
+#       Setup segments brightness for wled backlight
+#
+
+	echo 0,150,18,1 > /sys/class/leds/wled\:backlight/seg
+
 #
 #       Setup governor parameters and start mpdecision service
 #
@@ -20,7 +32,7 @@
         echo 10 > /sys/devices/system/cpu/cpufreq/ondemand/down_differential
 #
 #       up_threshold_multi_core:
-#	    Up threshold to increase to optimal freq when more than two cores are online
+#	  Up threshold to increase to optimal freq when more than two cores are online
 #
         echo 80 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_multi_core
         echo 3 > /sys/devices/system/cpu/cpufreq/ondemand/down_differential_multi_core
