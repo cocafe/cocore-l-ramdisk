@@ -1,0 +1,57 @@
+#!/system/bin/sh
+
+# mount special external sdcard 
+# that system does not originally supports
+
+# Remove sdcard operation in system settings
+# will umount all mounts point, thus no fuse
+
+# sdcard_rw gid:1015
+# media_rw  gid:1023
+# removable gid:2991
+
+BUSYBOX=/sbin/busybox
+LOCK_PID=/tmp/extsdcard.pid
+BLOCK_DEV=/dev/block/mmcblk1p1
+MOUNT_POINT=/mnt/media_rw/sdcard1
+FUSE_POINT=/storage/sdcard1
+
+if mount | grep -q 'mmcblk1p1'; then
+	exit
+fi
+
+if [ -f ${LOCK_PID} ]; then
+	kill `cat ${LOCK_PID}`
+fi
+
+if ${BUSYBOX} blkid | grep 'mmcblk1p1' | grep -q 'ext4'; then
+
+	e2fsck ${BLOCK_DEV}
+	mount -t ext4 -o rw,discard ${BLOCK_DEV} ${MOUNT_POINT}
+	# mount -t ext4 -o rw,seclabel,discard ${BLOCK_DEV} ${FUSE_POINT}
+
+elif ${BUSYBOX} blkid | grep 'mmcblk1p1' | grep -q 'exfat'; then
+
+	exfatck ${BLOCK_DEV}
+	# FIXME: Missing selinux label, need to disbale selinux
+	mount -t exfat -o rw,fmask=0000,dmask=0000,uid=1023,gid=1023 ${BLOCK_DEV} ${MOUNT_POINT}
+	# mount -t exfat -o rw,fmask=0000,dmask=0000,uid=1023,gid=1015 ${BLOCK_DEV} ${FUSE_POINT}
+
+else
+
+	# No support filesystem found
+	exit
+
+fi
+
+chown media_rw.media_rw  ${MOUNT_POINT}
+chown media_rw.sdcard_rw ${FUSE_POINT}
+chmod 0770 ${MOUNT_POINT}
+chmod 0770 ${FUSE_POINT}
+
+sdcard -u 1023 -g 1023 -w 1023 -d ${MOUNT_POINT} ${FUSE_POINT} &
+
+# Register sdcard to system
+vold
+
+#${BUSYBOX} ps | grep 'sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/sdca' | cut -c 0-6 > ${LOCK_FILE}
