@@ -19,6 +19,22 @@ busybox mkdir -m 755 -p /sys
 busybox mount -t proc proc /proc
 busybox mount -t sysfs sysfs /sys
 
+busybox mknod -m 666 /dev/null c 1 3
+
+# EMERGENCY DEBUG
+# busybox mknod -m 666 /mmcblksos b 179 24
+
+# busybox mkdir /sos
+# busybox mkdir /sos/proc
+# busybox mkdir /sos/cache
+
+# busybox mount -t proc proc /sos/proc
+# busybox mount -t ext4 /mmcblksos /sos/cache
+
+# busybox tail -f /boot.log > /sos/cache/boot.log &
+# busybox cat /sos/proc/kmsg > /sos/cache/kmsg.log &
+# EMERGENCY DEBUG END
+
 busybox echo 120 > /sys/class/timed_output/vibrator/enable
 
 if busybox grep -q '115' ${BOOTREC_GPIO} ; then
