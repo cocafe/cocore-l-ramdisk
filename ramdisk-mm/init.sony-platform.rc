@@ -448,11 +448,11 @@ on property:init.taimport.ready=true
     start config-linker
 
 # Start RIC
-service ric /sbin/ric
-    user root
-    group root drmrpc trimarea system
-    class main
-    seclabel u:r:ric:s0
+# service ric /sbin/ric
+#     user root
+#     group root drmrpc trimarea system
+#     class main
+#     seclabel u:r:ric:s0
 
 # VMware MVP Hypervisor daemon
 service mvpd /system/bin/mvpd -F -a 14
