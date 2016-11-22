@@ -1,0 +1,32 @@
+#
+# ADDITIONAL_DEFAULT_PROPERTIES
+#
+persist.sys.usb.config=mtp
+ro.sys.umsdirtyratio=5
+drm.service.enabled=true
+ro.secure=1
+ro.allow.mock.location=0
+ro.debuggable=0
+ro.zygote=zygote32
+dalvik.vm.image-dex2oat-Xms=64m
+dalvik.vm.image-dex2oat-Xmx=64m
+dalvik.vm.dex2oat-Xms=64m
+dalvik.vm.dex2oat-Xmx=512m
+ro.dalvik.vm.native.bridge=0
+debug.atrace.tags.enableflags=0
+persist.sys.strict_op_enable=false
+persist.sys.whitelist=/system/etc/whitelist_appops.xml
+camera2.portability.force_api=1
+#
+# BOOTIMAGE_BUILD_PROPERTIES
+#
+ro.bootimage.build.date=Sun Jul 24 19:29:13 CST 2016
+ro.bootimage.build.date.utc=1469359753
+ro.bootimage.build.fingerprint=Sony/sirius/sirius:6.0.1/M-SHINANO-160724-0943/1:user/dev-keys
+#
+# VERSION_PROPERTIES
+#
+ro.semc.version.sw=1278-4770
+ro.semc.version.sw_revision=23.5.A.1.291
+ro.semc.version.sw_variant=GENERIC
+ro.semc.version.sw_type=user

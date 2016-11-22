@@ -1,0 +1,46 @@
+# Copyright (c) 2014 Sony Mobile Communications Inc.
+#
+# product specific configuration
+#
+import init.sony-device-common.rc
+
+on boot
+    # OneSeg
+    chown system system /dev/onesegtuner
+    chmod 660 /dev/onesegtuner
+    chown system system /dev/i2c-11
+    chmod 660 /dev/i2c-11
+    insmod /system/lib/modules/tspp.ko
+    insmod /system/lib/modules/dvb-core.ko
+    insmod /system/lib/modules/mpq-adapter.ko
+    insmod /system/lib/modules/mpq-dmx-hw-plugin.ko
+    chown system system /dev/dvb/adapter0/demux0
+    chmod 660 /dev/dvb/adapter0/demux0
+    chown system system /dev/dvb/adapter0/demux1
+    chmod 660 /dev/dvb/adapter0/demux1
+    chown system system /dev/dvb/adapter0/demux2
+    chmod 660 /dev/dvb/adapter0/demux2
+    chown system system /dev/dvb/adapter0/demux3
+    chmod 660 /dev/dvb/adapter0/demux3
+    chown system system /dev/dvb/adapter0/dvr0
+    chmod 660 /dev/dvb/adapter0/dvr0
+    chown system system /dev/dvb/adapter0/dvr1
+    chmod 660 /dev/dvb/adapter0/dvr1
+    chown system system /dev/dvb/adapter0/dvr2
+    chmod 660 /dev/dvb/adapter0/dvr2
+    chown system system /dev/dvb/adapter0/dvr3
+    chmod 660 /dev/dvb/adapter0/dvr3
+    chown system system /sys/devices/onesegtuner_pdev/oneseg_power_ctrl
+    chmod 660 /sys/devices/onesegtuner_pdev/oneseg_power_ctrl
+    chown system system /sys/module/mpq_dmx_hw_plugin/parameters/tsif_mode
+    chmod 660 /sys/module/mpq_dmx_hw_plugin/parameters/tsif_mode
+
+on post-fs
+    # Create directory for DTV-GINGA
+    mkdir /dev/socket/isdbt 0755 system system
+
+# DTV-GINGA
+service dtvserver /system/bin/dtvserver
+    class main
+    user system
+    group system drm sdcard_rw
