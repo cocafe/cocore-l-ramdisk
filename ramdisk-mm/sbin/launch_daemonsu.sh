@@ -32,6 +32,12 @@ if [ `cat /proc/mounts | grep /su >/dev/null 2>&1; echo $?` -eq 0 ]; then
   fi
 fi
 
+if [ ! -f /data/su.img ]; then
+  if [ -f /vendor/su/su.img.tar.gz ]; then
+    tar -xvf /vendor/su/su.img.tar.gz -C /data
+  fi
+fi
+
 setprop sukernel.daemonsu.launch $MODE
 
 loopsetup() {
