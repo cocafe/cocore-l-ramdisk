@@ -103,22 +103,14 @@ on boot
 
     # Load kernel probes
     
-    
-
-    
-    
-    
+on early-boot
+    start mount-extsdcard
 
 on property:vold.decrypt=trigger_restart_framework
     start display_cc
 
 on property:init.svc.bootanim=stopped
     start init-cocore
-    start mount-extsdcard
-
-
-
-
 
 on property:gsm.nitz.time=*
     exec /system/bin/scdnotifier nitz
