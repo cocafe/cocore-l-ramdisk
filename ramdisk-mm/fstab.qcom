@@ -14,5 +14,5 @@
 /dev/block/bootdevice/by-name/config                  /frp        emmc    defaults             defaults
 /dev/block/platform/msm_sdcc.1/by-name/modemst1       /boot/modem_fs1        emmc    defaults        defaults
 /dev/block/platform/msm_sdcc.1/by-name/modemst2       /boot/modem_fs2        emmc    defaults        defaults
-/dev/block/zram0                                      none   swap    defaults             zramsize=536870912
+# /dev/block/zram0                                      none   swap    defaults             zramsize=536870912
 /devices/platform/xhci-hcd*                           auto   auto    nosuid,nodev         voldmanaged=usbdisk:auto
