@@ -78,10 +78,10 @@ on fs
     mkdir /mnt/runtime/write/remote 0775 root sdcard_rw
 
     # Load BRCM V4L2 drivers
-    insmod /system/lib/modules/brcm_hci_ldisc.ko
-    insmod /system/lib/modules/brcm_bt_drv.ko
-    insmod /system/lib/modules/fm_drv.ko
-    insmod /system/lib/modules/ant_drv.ko
+    insmod /lib/modules/brcm_hci_ldisc.ko
+    insmod /lib/modules/brcm_bt_drv.ko
+    insmod /lib/modules/fm_drv.ko
+    insmod /lib/modules/ant_drv.ko
 
     # Mount LTA-Label
     mkdir /lta-label 0555 system system

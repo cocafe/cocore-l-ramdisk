@@ -10,10 +10,10 @@ on boot
     chmod 660 /dev/onesegtuner
     chown system system /dev/i2c-11
     chmod 660 /dev/i2c-11
-    insmod /system/lib/modules/tspp.ko
-    insmod /system/lib/modules/dvb-core.ko
-    insmod /system/lib/modules/mpq-adapter.ko
-    insmod /system/lib/modules/mpq-dmx-hw-plugin.ko
+    insmod /lib/modules/tspp.ko
+    insmod /lib/modules/dvb-core.ko
+    insmod /lib/modules/mpq-adapter.ko
+    insmod /lib/modules/mpq-dmx-hw-plugin.ko
     chown system system /dev/dvb/adapter0/demux0
     chmod 660 /dev/dvb/adapter0/demux0
     chown system system /dev/dvb/adapter0/demux1
