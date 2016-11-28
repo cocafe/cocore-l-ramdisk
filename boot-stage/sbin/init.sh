@@ -43,10 +43,10 @@ if busybox grep -q '115' ${BOOTREC_GPIO} ; then
 	busybox echo 96  > ${BOOTREC_LED_GREEN}
 	busybox echo 0 > ${BOOTREC_LED_BLUE}
 
-	busybox echo 'CWM Recovery Boot' >> boot.log
+	# busybox echo 'CWM Recovery Boot' >> boot.log
 
-	busybox lzma -d /sbin/recovery-cwm.cpio.lzma
-	load_image=/sbin/recovery-cwm.cpio
+	# busybox lzma -d /sbin/recovery-cwm.cpio.lzma
+	# load_image=/sbin/recovery-cwm.cpio
 
 elif busybox grep -q '114' ${BOOTREC_GPIO} || busybox grep -q warmboot=0x77665502 /proc/cmdline ; then
 
