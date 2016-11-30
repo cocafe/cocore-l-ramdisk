@@ -21,6 +21,7 @@ busybox mount -t sysfs sysfs /sys
 
 busybox mknod -m 666 /dev/null c 1 3
 
+busybox echo 400 > /sys/class/leds/lcd-backlight/brightness
 busybox echo 120 > /sys/class/timed_output/vibrator/enable
 
 if busybox grep -q '115' ${BOOTREC_GPIO} ; then
