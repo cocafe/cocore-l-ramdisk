@@ -289,7 +289,7 @@ service usbhub_init /system/bin/usbhub_init
     mkdir /data/misc/SelfHost/Running/ 2750 system shell
     mkdir /data/misc/SelfHost/socket/ 2770 system system
 
-service mpdecision /system/bin/mpdecision
+service mpdecision /system/bin/mpdecision --avg_comp
     class main
     user root
     disabled

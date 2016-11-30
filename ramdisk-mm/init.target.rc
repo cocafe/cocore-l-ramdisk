@@ -134,10 +134,10 @@ service qseecomd /system/bin/qseecomd
    user root
    group root persist_rw
 
-service mpdecision /system/bin/mpdecision --avg_comp
-   class main
-   user root
-   disabled
+# service mpdecision /system/bin/mpdecision --avg_comp
+#    class main
+#    user root
+#    disabled
 
 service qosmgrd /system/bin/qosmgr /system/etc/qosmgr_rules.xml
    user system
