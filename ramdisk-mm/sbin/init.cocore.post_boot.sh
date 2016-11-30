@@ -1,54 +1,81 @@
 #!/system/bin/sh
 
-#	Fix conflict busybox with user installed one
-#	mount -t rootfs -o rw,remount rootfs /
-#	mv /sbin/busybox /sbin/busybox-sbin
-#	mount -t rootfs -o ro,remount rootfs /
+LOG=/boot.log
 
-#
-#       Setup segments brightness for wled backlight
-#
+# GOVS: ONDEMAND, INTERACTIVE
+CPUGOV=ONDEMAND
 
-	echo 0,150,18,1 > /sys/class/leds/wled\:backlight/seg
+# mount rootfs writable
+mount -o rw,remount /
 
-#
-#       Setup governor parameters and start mpdecision service
-#
-        echo 0 > /sys/module/msm_thermal/core_control/enabled
-        echo 1 > /sys/devices/system/cpu/cpu1/online
-        echo 1 > /sys/devices/system/cpu/cpu2/online
-        echo 1 > /sys/devices/system/cpu/cpu3/online
+# redirect logs
+echo "init.cocore.post_boot: `date`" >> ${LOG}
+echo "init.cocore.post_boot: ${GOV}" >> ${LOG}
+exec >> ${LOG} 2>&1
 
-        echo "ondemand" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-        echo "ondemand" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
-        echo "ondemand" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
-        echo "ondemand" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+# stop mpdecision service in case
+stop mpdecision
 
-        echo 25000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
-        echo 90 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold
-        echo 70 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_cpuinfo_min_freq
-        echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy
-        echo 2 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
-        echo 10 > /sys/devices/system/cpu/cpufreq/ondemand/down_differential
-#
-#       up_threshold_multi_core:
-#	  Up threshold to increase to optimal freq when more than two cores are online
-#
-        echo 80 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_multi_core
-        echo 3 > /sys/devices/system/cpu/cpufreq/ondemand/down_differential_multi_core
-        echo 960000 > /sys/devices/system/cpu/cpufreq/ondemand/optimal_freq
-        echo 729600 > /sys/devices/system/cpu/cpufreq/ondemand/sync_freq
-        echo 80 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_any_cpu_load
-        echo 1190000 > /sys/devices/system/cpu/cpufreq/ondemand/freq_input_boost
+# uksm
+echo low > /sys/kernel/mm/uksm/cpu_governor
 
-        echo 1 > /sys/module/msm_thermal/core_control/enabled
-#
-#	Enable Multi-core scheduler
-#
-	echo 2 > /sys/devices/system/cpu/sched_mc_power_savings
-#
-#       Wait for customized settings by user, allow to set all CPU governors
-#
-	sleep 30
-        start mpdecision
+# wled backlight segment threshold
+echo 0,150,18,1 > /sys/class/leds/wled\:backlight/seg
 
+# cpufreq governor settings
+
+echo 0 > /sys/module/msm_thermal/core_control/enabled
+
+echo 1 > /sys/devices/system/cpu/cpu1/online
+echo 1 > /sys/devices/system/cpu/cpu2/online
+echo 1 > /sys/devices/system/cpu/cpu3/online
+
+if [ ${CPUGOV} = ONDEMAND ]; then
+  echo "ondemand" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+  echo "ondemand" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+  echo "ondemand" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+  echo "ondemand" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+
+  echo 25000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
+  echo 90 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold
+  echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy
+  echo 2 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
+  echo 10 > /sys/devices/system/cpu/cpufreq/ondemand/down_differential
+  #
+  # up_threshold_multi_core:
+  #   Up threshold to increase to optimal freq when more than two cores are online
+  #
+  echo 80 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_multi_core
+  echo 3 > /sys/devices/system/cpu/cpufreq/ondemand/down_differential_multi_core
+  echo 960000 > /sys/devices/system/cpu/cpufreq/ondemand/optimal_freq
+  echo 729600 > /sys/devices/system/cpu/cpufreq/ondemand/sync_freq
+  echo 80 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_any_cpu_load
+elif [ ${CPUGOV} = INTERACTIVE ]; then
+  echo "interactive" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+  echo "interactive" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+  echo "interactive" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+  echo "interactive" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+
+  echo "10000 1800000:20000" > /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+  echo 90 > /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+  echo 1190400 > /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+
+  echo 1 > /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
+
+  echo "85 1500000:90 1800000:70" > /sys/devices/system/cpu/cpufreq/interactive/target_loads
+
+  echo 10000 > /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+  echo 20000 > /sys/devices/system/cpu/cpufreq/interactive/sampling_down_factor
+  echo 10000 > /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+fi
+
+echo 1 > /sys/module/msm_thermal/core_control/enabled
+
+# enable multi-core scheduler
+echo 2 > /sys/devices/system/cpu/sched_mc_power_savings
+
+# wait for customized settings by user, allow to set for all CPUs
+sleep 30
+
+# start mpdecision service
+start mpdecision

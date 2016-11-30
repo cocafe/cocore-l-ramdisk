@@ -201,6 +201,12 @@ on init
     # enable armv8_deprecated instruction hooks
     write /proc/sys/abi/swp 1
 
+    # switch performance cpufreq governor
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor performance
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor performance
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor performance
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor performance
+
 # Healthd can trigger a full boot from charger mode by signaling this
 # property when the power button is held.
 on property:sys.boot_from_charger_mode=1
@@ -769,7 +775,7 @@ service logcatd /system/bin/logcat -b all -v threadtime -v usec -v printable -D 
 
 on property:sys.boot_completed=1
     start sysinit
-    start ccpostboot
+    start cocoreinit
 
 service sysinit /sbin/sysinit.sh
     oneshot
@@ -778,7 +784,7 @@ service sysinit /sbin/sysinit.sh
     group root
     disabled
 
-service ccpostboot /sbin/init.cocore.post_boot.sh
+service cocoreinit /sbin/init.cocore.post_boot.sh
     oneshot
     class late_start
     user root

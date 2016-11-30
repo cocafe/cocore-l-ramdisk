@@ -304,8 +304,8 @@ on boot
 on property:vold.decrypt=trigger_restart_framework
     start display_cc
 
-on property:init.svc.bootanim=stopped
-    start set-governor
+# on property:init.svc.bootanim=stopped
+#     start set-governor
 
 
 
@@ -380,10 +380,10 @@ on property:init.svc.surfaceflinger=stopped
 on property:init.svc.surfaceflinger=running
     start illumination
 
-service set-governor /system/bin/sh /system/etc/set_governor.sh
-    user root
-    disabled
-    oneshot
+# service set-governor /system/bin/sh /system/etc/set_governor.sh
+#     user root
+#     disabled
+#     oneshot
 
 service scd /system/bin/scd
     class late_start
