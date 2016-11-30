@@ -10,11 +10,18 @@ mount -o rw,remount /
 
 # redirect logs
 echo "init.cocore.post_boot: `date`" >> ${LOG}
-echo "init.cocore.post_boot: ${GOV}" >> ${LOG}
+echo "init.cocore.post_boot: ${CPUGOV}" >> ${LOG}
 exec >> ${LOG} 2>&1
 
 # stop mpdecision service in case
 stop mpdecision
+
+# two-core touchboost offered by mpdecision
+# this system property can adjust on the fly
+#
+# let user decide, for instance, via init.d etc etc
+#
+# setprop sys.somc.touch_perf_kick 0
 
 # uksm
 echo low > /sys/kernel/mm/uksm/cpu_governor
@@ -22,8 +29,9 @@ echo low > /sys/kernel/mm/uksm/cpu_governor
 # wled backlight segment threshold
 echo 0,150,18,1 > /sys/class/leds/wled\:backlight/seg
 
+#
 # cpufreq governor settings
-
+#
 echo 0 > /sys/module/msm_thermal/core_control/enabled
 
 echo 1 > /sys/devices/system/cpu/cpu1/online
@@ -73,6 +81,9 @@ echo 1 > /sys/module/msm_thermal/core_control/enabled
 
 # enable multi-core scheduler
 echo 2 > /sys/devices/system/cpu/sched_mc_power_savings
+
+# invoke sysinit.d service
+start sysinit
 
 # wait for customized settings by user, allow to set for all CPUs
 sleep 30

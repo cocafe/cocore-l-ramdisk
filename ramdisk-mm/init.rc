@@ -774,12 +774,10 @@ service logcatd /system/bin/logcat -b all -v threadtime -v usec -v printable -D 
     writepid /dev/cpuset/system-background/tasks
 
 on property:sys.boot_completed=1
-    start sysinit
     start cocoreinit
 
-service sysinit /sbin/sysinit.sh
+service sysinit /sbin/init.cocore.sys_init.sh
     oneshot
-    class late_start
     user root
     group root
     disabled
