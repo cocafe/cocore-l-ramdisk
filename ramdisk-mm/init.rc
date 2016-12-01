@@ -773,10 +773,19 @@ service logcatd /system/bin/logcat -b all -v threadtime -v usec -v printable -D 
     group log
     writepid /dev/cpuset/system-background/tasks
 
+on boot
+    start sysinit_early
+
 on property:sys.boot_completed=1
     start cocoreinit
 
 service sysinit /sbin/init.cocore.sys_init.sh
+    oneshot
+    user root
+    group root
+    disabled
+
+service sysinit_early /sbin/init.cocore.early_init.sh
     oneshot
     user root
     group root
