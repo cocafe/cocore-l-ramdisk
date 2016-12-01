@@ -414,10 +414,10 @@ service wvkbd_installer /system/bin/wvkbd
     oneshot
     disabled
 
-service ssr_dump /system/bin/ssrapp
-     class main
-     user root
-     group root system
+# service ssr_dump /system/bin/ssrapp
+#      class main
+#      user root
+#      group root system
 
 
 
