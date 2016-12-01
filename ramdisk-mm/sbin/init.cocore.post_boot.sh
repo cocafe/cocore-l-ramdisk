@@ -6,7 +6,9 @@ LOG=/boot.log
 CPUGOV=ONDEMAND
 
 # mount rootfs writable
-mount -o rw,remount /
+if mount | grep rootfs | grep -q ro; then
+  mount -o rw,remount /
+fi
 
 # redirect logs
 echo "init.cocore.post_boot: `date`" >> ${LOG}
