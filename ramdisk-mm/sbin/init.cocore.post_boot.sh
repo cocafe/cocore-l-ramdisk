@@ -13,6 +13,18 @@ echo "init.cocore.post_boot: `date`" >> ${LOG}
 echo "init.cocore.post_boot: ${CPUGOV}" >> ${LOG}
 exec >> ${LOG} 2>&1
 
+# uksm
+echo full > /sys/kernel/mm/uksm/cpu_governor
+echo 50 > /sys/kernel/mm/uksm/max_cpu_percentage
+echo 1 > /sys/kernel/mm/uksm/run
+
+# wled backlight segment threshold
+# echo 0,150,18,1 > /sys/class/leds/wled\:backlight/seg
+
+#
+# cpufreq governor settings
+#
+
 # stop mpdecision service in case
 stop mpdecision
 
@@ -23,15 +35,6 @@ stop mpdecision
 #
 # setprop sys.somc.touch_perf_kick 0
 
-# uksm
-echo low > /sys/kernel/mm/uksm/cpu_governor
-
-# wled backlight segment threshold
-echo 0,150,18,1 > /sys/class/leds/wled\:backlight/seg
-
-#
-# cpufreq governor settings
-#
 echo 0 > /sys/module/msm_thermal/core_control/enabled
 
 echo 1 > /sys/devices/system/cpu/cpu1/online
