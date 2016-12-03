@@ -17,7 +17,7 @@ exec >> ${LOG} 2>&1
 
 # uksm
 echo full > /sys/kernel/mm/uksm/cpu_governor
-echo 50 > /sys/kernel/mm/uksm/max_cpu_percentage
+echo 85 > /sys/kernel/mm/uksm/max_cpu_percentage
 echo 1 > /sys/kernel/mm/uksm/run
 
 # wled backlight segment threshold
