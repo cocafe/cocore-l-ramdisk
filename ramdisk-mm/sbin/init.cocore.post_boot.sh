@@ -15,6 +15,9 @@ echo "init.cocore.post_boot: `date`" >> ${LOG}
 echo "init.cocore.post_boot: ${CPUGOV}" >> ${LOG}
 exec >> ${LOG} 2>&1
 
+# bpf jit
+echo 1 > /proc/sys/net/core/bpf_jit_enable
+
 # uksm
 echo full > /sys/kernel/mm/uksm/cpu_governor
 echo 85 > /sys/kernel/mm/uksm/max_cpu_percentage
@@ -95,3 +98,4 @@ sleep 30
 
 # start mpdecision service
 start mpdecision
+
