@@ -19,9 +19,11 @@ exec >> ${LOG} 2>&1
 echo 1 > /proc/sys/net/core/bpf_jit_enable
 
 # uksm
-echo full > /sys/kernel/mm/uksm/cpu_governor
-echo 85 > /sys/kernel/mm/uksm/max_cpu_percentage
-echo 1 > /sys/kernel/mm/uksm/run
+if [ -e /sys/kernel/mm/uksm ] ; then
+  echo full > /sys/kernel/mm/uksm/cpu_governor
+  echo 85 > /sys/kernel/mm/uksm/max_cpu_percentage
+# echo 1 > /sys/kernel/mm/uksm/run
+fi
 
 # wled backlight segment threshold
 # echo 0,150,18,1 > /sys/class/leds/wled\:backlight/seg
