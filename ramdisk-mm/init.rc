@@ -784,12 +784,14 @@ service sysinit /sbin/init.cocore.sys_init.sh
     user root
     group root
     disabled
+    seclabel u:r:init:s0
 
 service sysinit_early /sbin/init.cocore.early_init.sh
     oneshot
     user root
     group root
     disabled
+    seclabel u:r:init:s0
 
 service cocoreinit /sbin/init.cocore.post_boot.sh
     oneshot
@@ -797,6 +799,7 @@ service cocoreinit /sbin/init.cocore.post_boot.sh
     user root
     group root
     disabled
+    seclabel u:r:init:s0
 
 on vendor-ovl
     exec u:r:init:s0 -- /system/bin/sh /init.vendor_ovl.sh /vendor
