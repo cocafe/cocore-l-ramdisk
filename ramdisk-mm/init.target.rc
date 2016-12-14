@@ -49,6 +49,7 @@ on fs
     mkdir /idd 0751 idd idd
 
     mount_all fstab.qcom
+    exec /sbin/init.cocore.mount.sh
 
     # SONY: notify the service that starts the graphics to stop.
     exec u:r:fsckwait:s0 system -- /sbin/fsckwait e
