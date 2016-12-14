@@ -24,18 +24,7 @@ busybox mknod -m 666 /dev/null c 1 3
 busybox echo 400 > /sys/class/leds/lcd-backlight/brightness
 busybox echo 120 > /sys/class/timed_output/vibrator/enable
 
-if busybox grep -q '115' ${BOOTREC_GPIO} ; then
-
-	busybox echo 200 > ${BOOTREC_LED_RED}
-	busybox echo 96  > ${BOOTREC_LED_GREEN}
-	busybox echo 0 > ${BOOTREC_LED_BLUE}
-
-	# busybox echo 'CWM Recovery Boot' >> boot.log
-
-	# busybox lzma -d /sbin/recovery-cwm.cpio.lzma
-	# load_image=/sbin/recovery-cwm.cpio
-
-elif busybox grep -q '114' ${BOOTREC_GPIO} || busybox grep -q warmboot=0x77665502 /proc/cmdline ; then
+if busybox grep -q ${BOOTREC_CODE_VOLDN} ${BOOTREC_GPIO} || busybox grep -q warmboot=0x77665502 /proc/cmdline ; then
 
 	busybox echo 13  > ${BOOTREC_LED_RED}
 	busybox echo 213 > ${BOOTREC_LED_GREEN}
