@@ -14,6 +14,7 @@ BLK_USERDATA=/dev/block/mmcblk0p25
 VOL_UP=115
 VOL_DN=114
 GPIO_KEY=/sys/devices/gpio_keys.82/keys_pressed
+VIBRATOR=/sys/class/timed_output/vibrator/enable
 
 LED_RED=/sys/class/leds/led\:rgb_red/brightness
 LED_GREEN=/sys/class/leds/led\:rgb_green/brightness
@@ -65,10 +66,13 @@ exec >> ${LOG} 2>&1
 led_blkid
 
 # avoid calling blkid multiple times
-${BB} blkid >> ${LOG}
+${BB} blkid ${BLK_SYSTEM}   >> ${LOG}
+${BB} blkid ${BLK_CACHE}    >> ${LOG}
+${BB} blkid ${BLK_USERDATA} >> ${LOG}
 
 if ${BB} grep -q ${VOL_UP} ${GPIO_KEY}; then
   FSCK_FORCE=true
+  ${BB} echo 200 > ${VIBRATOR}
 fi
 
 led_premount
