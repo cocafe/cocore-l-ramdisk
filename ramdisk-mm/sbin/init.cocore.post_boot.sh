@@ -18,8 +18,19 @@ exec >> ${LOG} 2>&1
 # bpf jit
 echo 1 > /proc/sys/net/core/bpf_jit_enable
 
+# block scheduler
+if [ -e /sys/block/mmcblk0 ]; then
+  echo cfq > /sys/block/mmcblk0/queue/scheduler
+  echo 3 > /sys/block/mmcblk0/queue/iosched/target_latency
+fi
+
+if [ -e /sys/block/mmcblk1 ]; then
+  echo cfq > /sys/block/mmcblk1/queue/scheduler
+  echo 3 > /sys/block/mmcblk1/queue/iosched/target_latency
+fi
+
 # uksm
-if [ -e /sys/kernel/mm/uksm ] ; then
+if [ -e /sys/kernel/mm/uksm ]; then
   echo full > /sys/kernel/mm/uksm/cpu_governor
   echo 85 > /sys/kernel/mm/uksm/max_cpu_percentage
 # echo 1 > /sys/kernel/mm/uksm/run
