@@ -1,7 +1,7 @@
 #
 # ADDITIONAL_DEFAULT_PROPERTIES
 #
-persist.sys.usb.config=mtp
+persist.sys.usb.config=mtp,adb
 ro.sys.umsdirtyratio=5
 drm.service.enabled=true
 ro.secure=1
