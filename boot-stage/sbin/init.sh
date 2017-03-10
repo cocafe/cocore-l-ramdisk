@@ -56,7 +56,7 @@ busybox umount /proc
 busybox umount /sys
 
 busybox rm -fr /dev/*
-busybox rm /sbin/*.lzma
+#busybox rm /sbin/*.lzma
 busybox rm /sbin/*.cpio
 
 export PATH="${_PATH}"
