@@ -2,6 +2,12 @@
 
 MODE=$1
 
+if [ ! -e /su ]; then
+  mkdir /su
+  chmod 0750 /su
+  chown root.root /su
+fi
+
 log_print() {
   echo "($MODE) $1"
   echo "launch_daemonsu: ($MODE) $1" >> /boot.log
