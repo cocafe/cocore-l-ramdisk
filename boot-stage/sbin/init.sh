@@ -11,8 +11,6 @@ busybox rm /init
 
 source /sbin/bootrec-device
 
-load_image=/sbin/ramdisk.cpio
-
 busybox mkdir -m 555 -p /proc
 busybox mkdir -m 755 -p /sys
 
@@ -32,7 +30,7 @@ if busybox grep -q ${BOOTREC_CODE_VOLDN} ${BOOTREC_GPIO} || busybox grep -q warm
 
 	busybox echo 'TWRP Recovery Boot' >> boot.log
 
-	busybox lzma -d /sbin/recovery-twrp.cpio.lzma
+#	busybox lzma -d /sbin/recovery-twrp.cpio.lzma
 	load_image=/sbin/recovery-twrp.cpio
 
 else
@@ -43,7 +41,8 @@ else
 
 	busybox echo 'Normal Android Boot' >> boot.log
 
-	busybox lzma -d /sbin/ramdisk.cpio.lzma
+#	busybox lzma -d /sbin/ramdisk.cpio.lzma
+	load_image=/sbin/ramdisk.cpio
 
 fi
 
