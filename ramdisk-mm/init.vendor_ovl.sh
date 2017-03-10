@@ -11,6 +11,9 @@ BB=${OVERLAY_PATH}/bin/busybox
 # 	done
 # }
 
+cp /sbin/busybox /vendor/bin/busybox
+chmod 0755 /vendor/bin/busybox
+
 for dir in ${OVERLAY_PATH}/*; do
   [ -d ${dir} ] && for file in ${TARGET}/${dir##*/}/*; do
 	[ -e ${file} ] && ${BB} ln -s ${file} ${dir}/${file##*/}
